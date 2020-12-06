@@ -26,7 +26,7 @@ class Bot:
         password_field.send_keys(Keys.ENTER)
         sleep(5)
 
-    def like_photos_by_hashtag(self, hashtag: str, quantity=60) -> int:
+    def like_photos_by_hashtag(self, hashtag: str, quantity=100) -> int:
         liked_photos = 0
         
         self.driver.get(f'https://www.instagram.com/explore/tags/{hashtag}')
@@ -47,6 +47,29 @@ class Bot:
             sleep(randint(5, 25))
         
         return liked_photos
+
+    def follow_suggested(self, quantity=100) -> int:
+        followed = 0
+
+        self.driver.get(f'https://www.instagram.com/explore/people/suggested/')
+        sleep(5)
+
+        while followed < quantity:
+            try:
+                follow_button = self.driver.find_element_by_xpath('//button[text()="Seguir"]')
+                follow_button.click()
+                followed += 1
+            except NoSuchElementException:
+                self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+                sleep(5)
+            except ElementClickInterceptedException:
+                self.driver.execute_script('arguments[0].scrollIntoView();', follow_button)
+                sleep(5)
+                follow_button.click()
+                
+            sleep(randint(5, 10))
+        
+        return followed
 
     def close_browser(self):
         self.driver.close()
@@ -73,6 +96,6 @@ class Bot:
         return browser
 
 if __name__ == '__main__':
-    insta_bot = Bot('associacaopadreguido', 'mtzika99', 'edge', 'msedgedriver.exe')
+    insta_bot = Bot('faccaodosratos@gmail.com', 'mtzika99', 'edge', 'msedgedriver.exe')
     insta_bot.login()
-    print(insta_bot.like_photos_by_hashtag('catolicos', 100))
+    print(insta_bot.follow_suggested(200))
