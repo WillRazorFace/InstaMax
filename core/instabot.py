@@ -8,6 +8,7 @@ from random import randint
 from selenium.common.exceptions import WebDriverException, NoSuchElementException, ElementClickInterceptedException, TimeoutException
 import exceptions
 from time import sleep
+from typing import Iterator
 
 class Bot:
     INSTAGRAM_URL: str = 'https://www.instagram.com/'
@@ -83,7 +84,7 @@ class Bot:
         
         return False
 
-    def get_followers(self, account: str, quantity=100, all=False):
+    def get_followers(self, account: str, quantity=100, all=False) -> Iterator[str]:
         self.driver.get(self.INSTAGRAM_URL + account)
         sleep(1)
         followers_button = self.driver.find_element_by_css_selector("a[href*='/" + account +"/followers/']")
@@ -117,6 +118,40 @@ class Bot:
 
             yield follower
 
+    def get_following(self, account: str, quantity=100, all=False) -> Iterator[str]:
+        self.driver.get(self.INSTAGRAM_URL + account)
+        sleep(1)
+        following_button = self.driver.find_element_by_css_selector("a[href*='/" + account +"/following/']")
+
+        if all:
+            quantity = int(following_button.text.split()[0])
+
+        following_button.click()
+
+        wait = WebDriverWait(self.driver, 20)
+
+        try:
+            xpath = '/html/body/div[4]/div/div/div[2]/ul/div/li['
+            self.driver.find_element_by_xpath(xpath + '1]')
+        except NoSuchElementException:
+            xpath = '/html/body/div[5]/div/div/div[2]/ul/div/li['
+
+        for i in range(1, quantity + 1):
+            try:
+                following_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
+            except NoSuchElementException:
+                try:
+                    wait.until(EC.element_to_be_clickable((By.XPATH, xpath + f'{i}]')))
+                    following_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
+                except TimeoutException:
+                    break
+            
+            following = following_li.text.split()[0]
+            self.driver.execute_script('arguments[0].scrollIntoView();', following_li)
+            sleep(1)
+
+            yield following
+
     def close_browser(self):
         self.driver.close()
 
@@ -144,4 +179,7 @@ class Bot:
 if __name__ == '__main__':
     insta_bot = Bot('associacaopadreguido', 'mtzika99', 'edge', 'msedgedriver.exe')
     insta_bot.login()
-    insta_bot.search_follower(insta_bot.usuario, 'margaridalivre79')
+    following = []
+
+    for user in insta_bot.get_following(insta_bot.usuario, all=True):
+        print(user)
