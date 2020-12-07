@@ -1,19 +1,24 @@
 from selenium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from random import randint
-from selenium.common.exceptions import WebDriverException, NoSuchElementException, ElementClickInterceptedException
+from selenium.common.exceptions import WebDriverException, NoSuchElementException, ElementClickInterceptedException, TimeoutException
 import exceptions
 from time import sleep
 
 class Bot:
+    INSTAGRAM_URL: str = 'https://www.instagram.com/'
+
     def __init__(self, usuario: str, senha: str, driver: str, driverpath: str) -> None:
         self.usuario = usuario
         self.senha = senha
         self.driver = self.init_browser(driver, driverpath)
 
     def login(self) -> None:
-        self.driver.get('https://www.instagram.com/accounts/login')
+        self.driver.get(self.INSTAGRAM_URL + 'accounts/login')
         sleep(2)
 
         username_field = self.driver.find_element_by_name('username')
@@ -29,29 +34,29 @@ class Bot:
     def like_photos_by_hashtag(self, hashtag: str, quantity=100) -> int:
         liked_photos = 0
         
-        self.driver.get(f'https://www.instagram.com/explore/tags/{hashtag}')
+        self.driver.get(self.INSTAGRAM_URL + f'explore/tags/{hashtag}')
         sleep(5)
 
         self.driver.find_element_by_class_name('_9AhH0').click()
-
+        
         while liked_photos < quantity:
             sleep(2)
+
             try:
                 self.driver.find_element_by_class_name('fr66n').click()
                 liked_photos += 1
-
                 self.driver.find_element_by_class_name('_65Bje').click()
             except (ElementClickInterceptedException, NoSuchElementException):
                 return liked_photos
 
-            sleep(randint(5, 25))
+            sleep(randint(5, 15))
         
         return liked_photos
 
     def follow_suggested(self, quantity=100) -> int:
         followed = 0
 
-        self.driver.get(f'https://www.instagram.com/explore/people/suggested/')
+        self.driver.get(self.INSTAGRAM_URL + 'explore/people/suggested/')
         sleep(5)
 
         while followed < quantity:
@@ -70,6 +75,40 @@ class Bot:
             sleep(randint(5, 10))
         
         return followed
+
+    def get_followers(self, account: str, quantity=100, all=False):
+        self.driver.get(self.INSTAGRAM_URL + account)
+        sleep(1)
+        followers_button = self.driver.find_element_by_css_selector("a[href*='/" + account +"/followers/']")
+
+        if all:
+            quantity = int(followers_button.text.split()[0])
+
+        followers_button.click()
+
+        wait = WebDriverWait(self.driver, 20)
+
+        try:
+            xpath = '/html/body/div[4]/div/div/div[2]/ul/div/li['
+            self.driver.find_element_by_xpath(xpath + '1]')
+        except NoSuchElementException:
+            xpath = '/html/body/div[5]/div/div/div[2]/ul/div/li['
+
+        for i in range(1, quantity + 1):
+            try:
+                follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
+            except NoSuchElementException:
+                try:
+                    wait.until(EC.element_to_be_clickable((By.XPATH, xpath + f'{i}]')))
+                    follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
+                except TimeoutException:
+                    break
+            
+            follower = follower_li.text.split()[0]
+            self.driver.execute_script('arguments[0].scrollIntoView();', follower_li)
+            sleep(1)
+
+            yield follower
 
     def close_browser(self):
         self.driver.close()
@@ -96,6 +135,12 @@ class Bot:
         return browser
 
 if __name__ == '__main__':
-    insta_bot = Bot('faccaodosratos@gmail.com', 'mtzika99', 'edge', 'msedgedriver.exe')
+    insta_bot = Bot('associacaopadreguido', 'mtzika99', 'edge', 'msedgedriver.exe')
     insta_bot.login()
-    print(insta_bot.follow_suggested(200))
+    seguidores = []
+
+    for seguidor in insta_bot.get_followers(insta_bot.usuario, all=True):
+        if seguidor == 'inwardjoy':
+            break
+        
+        seguidores.append(seguidor)
