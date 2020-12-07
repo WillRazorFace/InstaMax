@@ -8,7 +8,7 @@ from random import randint
 from selenium.common.exceptions import WebDriverException, NoSuchElementException, ElementClickInterceptedException, TimeoutException
 import exceptions
 from time import sleep
-from typing import Iterator
+from typing import Iterator, Iterable, List
 
 class Bot:
     INSTAGRAM_URL: str = 'https://www.instagram.com/'
@@ -91,13 +91,24 @@ class Bot:
         
         return False
 
-    def search_not_followers(self):
+    def search_not_followers(self) -> Iterable[str]:
         followers = [follower for follower in self.get_followers(self.usuario, all=True)]
         following = [following for following in self.get_following(self.usuario, all=True)]
 
         not_followers = [user for user in following if user not in followers]
 
         return not_followers
+
+    def unfollow_not_followers(self, ignore: List[str]) -> int:
+        not_followers = [user for user in self.search_not_followers() if user not in ignore]
+
+        for not_follower in not_followers:
+            self.driver.get(self.INSTAGRAM_URL + not_follower)
+            sleep(1)
+            self.driver.find_element_by_class_name('_5f5mN').click()
+            sleep(2)
+            self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
+            sleep(1)
 
     def get_followers(self, account: str, quantity=100, all=False) -> Iterator[str]:
         self.driver.get(self.INSTAGRAM_URL + account)
@@ -194,4 +205,4 @@ class Bot:
 if __name__ == '__main__':
     insta_bot = Bot('e', 'mtzika99', 'edge', 'msedgedriver.exe')
     insta_bot.login()
-    print(insta_bot.search_not_followers())
+    print(insta_bot.unfollow_not_followers(['edunicolli', 'victorcolucci']))
