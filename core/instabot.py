@@ -76,6 +76,13 @@ class Bot:
         
         return followed
 
+    def search_follower(self, search_account: str, account: str) -> bool:
+        for follower in self.get_followers(search_account, all=True):
+            if follower == account:
+                return True
+        
+        return False
+
     def get_followers(self, account: str, quantity=100, all=False):
         self.driver.get(self.INSTAGRAM_URL + account)
         sleep(1)
@@ -137,10 +144,4 @@ class Bot:
 if __name__ == '__main__':
     insta_bot = Bot('associacaopadreguido', 'mtzika99', 'edge', 'msedgedriver.exe')
     insta_bot.login()
-    seguidores = []
-
-    for seguidor in insta_bot.get_followers(insta_bot.usuario, all=True):
-        if seguidor == 'inwardjoy':
-            break
-        
-        seguidores.append(seguidor)
+    insta_bot.search_follower(insta_bot.usuario, 'margaridalivre79')
