@@ -91,6 +91,14 @@ class Bot:
         
         return False
 
+    def search_not_followers(self):
+        followers = [follower for follower in self.get_followers(self.usuario, all=True)]
+        following = [following for following in self.get_following(self.usuario, all=True)]
+
+        not_followers = [user for user in following if user not in followers]
+
+        return not_followers
+
     def get_followers(self, account: str, quantity=100, all=False) -> Iterator[str]:
         self.driver.get(self.INSTAGRAM_URL + account)
         sleep(1)
@@ -184,6 +192,6 @@ class Bot:
         return browser
 
 if __name__ == '__main__':
-    insta_bot = Bot('associacaopadreguido', 'mtzika99', 'edge', 'msedgedriver.exe')
+    insta_bot = Bot('e', 'mtzika99', 'edge', 'msedgedriver.exe')
     insta_bot.login()
-    print(insta_bot.search_following(insta_bot.usuario, 'gal_gadot'))
+    print(insta_bot.search_not_followers())
