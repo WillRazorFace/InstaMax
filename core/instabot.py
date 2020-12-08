@@ -54,7 +54,7 @@ class Bot:
         
         return liked_photos
 
-    def follow_suggested(self, quantity=100) -> int:
+    def follow_suggested(self, quantity=100, ignore: List[str] = []) -> int:
         followed = 0
 
         self.driver.get(self.INSTAGRAM_URL + 'explore/people/suggested/')
@@ -99,7 +99,7 @@ class Bot:
 
         return not_followers
 
-    def unfollow_not_followers(self, ignore: List[str]) -> int:
+    def unfollow_not_followers(self, ignore: List[str] = []) -> int:
         not_followers = [user for user in self.search_not_followers() if user not in ignore]
 
         for not_follower in not_followers:
