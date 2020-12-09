@@ -78,17 +78,18 @@ class Bot:
         
         return followed
 
-    def unfollow(self, quantity=100, ignore: List[str]=[], all=False):
+    def unfollow(self, quantity=100, ignore: List[str]=[], all=False) -> None:
         following_users = [user for user in self.get_following(self.usuario, quantity, all)]
 
         for user in following_users:
             if user not in ignore:
                 self.driver.get(self.INSTAGRAM_URL + user)
-                sleep(1)
+                self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, '5f5mN')))
+
                 self.driver.find_element_by_class_name('_5f5mN').click()
-                sleep(2)
+                self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[5]/div/div/div/div[3]/button[1]')))
+
                 self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
-                unfollowed += 1
                 sleep(5)
 
     def search_follower(self, search_account: str, account: str) -> bool:
@@ -113,7 +114,7 @@ class Bot:
 
         return not_followers
 
-    def unfollow_not_followers(self, ignore: List[str] = []):
+    def unfollow_not_followers(self, ignore: List[str] = []) -> None:
         not_followers = [user for user in self.search_not_followers() if user not in ignore]
 
         for not_follower in not_followers:
