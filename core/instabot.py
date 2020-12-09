@@ -17,6 +17,7 @@ class Bot:
         self.usuario = usuario
         self.senha = senha
         self.driver = self.init_browser(driver, driverpath)
+        self.wait = WebDriverWait(self.driver, 20)
 
     def login(self) -> None:
         self.driver.get(self.INSTAGRAM_URL + 'accounts/login')
@@ -77,6 +78,19 @@ class Bot:
         
         return followed
 
+    def unfollow(self, quantity=100, ignore: List[str]=[], all=False):
+        following_users = [user for user in self.get_following(self.usuario, quantity, all)]
+
+        for user in following_users:
+            if user not in ignore:
+                self.driver.get(self.INSTAGRAM_URL + user)
+                sleep(1)
+                self.driver.find_element_by_class_name('_5f5mN').click()
+                sleep(2)
+                self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
+                unfollowed += 1
+                sleep(5)
+
     def search_follower(self, search_account: str, account: str) -> bool:
         for follower in self.get_followers(search_account, all=True):
             if follower == account:
@@ -99,28 +113,29 @@ class Bot:
 
         return not_followers
 
-    def unfollow_not_followers(self, ignore: List[str] = []) -> int:
+    def unfollow_not_followers(self, ignore: List[str] = []):
         not_followers = [user for user in self.search_not_followers() if user not in ignore]
 
         for not_follower in not_followers:
             self.driver.get(self.INSTAGRAM_URL + not_follower)
-            sleep(1)
+            self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, '5f5mN')))
+
             self.driver.find_element_by_class_name('_5f5mN').click()
-            sleep(2)
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[5]/div/div/div/div[3]/button[1]')))
+
             self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
-            sleep(1)
+            sleep(5)
 
     def get_followers(self, account: str, quantity=100, all=False) -> Iterator[str]:
         self.driver.get(self.INSTAGRAM_URL + account)
-        sleep(1)
+        self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href*='/" + account +"/followers/']")))
+        
         followers_button = self.driver.find_element_by_css_selector("a[href*='/" + account +"/followers/']")
 
         if all:
             quantity = int(followers_button.text.split()[0])
 
         followers_button.click()
-
-        wait = WebDriverWait(self.driver, 20)
 
         try:
             xpath = '/html/body/div[4]/div/div/div[2]/ul/div/li['
@@ -133,7 +148,7 @@ class Bot:
                 follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
             except NoSuchElementException:
                 try:
-                    wait.until(EC.element_to_be_clickable((By.XPATH, xpath + f'{i}]')))
+                    self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath + f'{i}]')))
                     follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
                 except TimeoutException:
                     break
@@ -146,15 +161,14 @@ class Bot:
 
     def get_following(self, account: str, quantity=100, all=False) -> Iterator[str]:
         self.driver.get(self.INSTAGRAM_URL + account)
-        sleep(1)
+        self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href*='/" + account +"/following/']")))
+
         following_button = self.driver.find_element_by_css_selector("a[href*='/" + account +"/following/']")
 
         if all:
             quantity = int(following_button.text.split()[0])
 
         following_button.click()
-
-        wait = WebDriverWait(self.driver, 20)
 
         try:
             xpath = '/html/body/div[4]/div/div/div[2]/ul/div/li['
@@ -167,7 +181,7 @@ class Bot:
                 following_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
             except NoSuchElementException:
                 try:
-                    wait.until(EC.element_to_be_clickable((By.XPATH, xpath + f'{i}]')))
+                    self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath + f'{i}]')))
                     following_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
                 except TimeoutException:
                     break
@@ -205,4 +219,4 @@ class Bot:
 if __name__ == '__main__':
     insta_bot = Bot('e', 'mtzika99', 'edge', 'msedgedriver.exe')
     insta_bot.login()
-    insta_bot.search_follower(insta_bot.usuario, 'luizdcaputo')
+    insta_bot.unfollow(ignore=['ra7onderecho'])
