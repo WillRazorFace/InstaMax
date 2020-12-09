@@ -140,7 +140,7 @@ class Bot:
             
             follower = follower_li.text.split()[0]
             self.driver.execute_script('arguments[0].scrollIntoView();', follower_li)
-            sleep(1)
+            sleep(0.5)
 
             yield follower
 
@@ -174,7 +174,7 @@ class Bot:
             
             following = following_li.text.split()[0]
             self.driver.execute_script('arguments[0].scrollIntoView();', following_li)
-            sleep(1)
+            sleep(0.5)
 
             yield following
 
@@ -205,4 +205,4 @@ class Bot:
 if __name__ == '__main__':
     insta_bot = Bot('e', 'mtzika99', 'edge', 'msedgedriver.exe')
     insta_bot.login()
-    print(insta_bot.unfollow_not_followers(['edunicolli', 'victorcolucci']))
+    insta_bot.search_follower(insta_bot.usuario, 'luizdcaputo')
