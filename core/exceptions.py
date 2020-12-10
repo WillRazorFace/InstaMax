@@ -3,3 +3,6 @@ class InvalidDriverModel(Exception):
 
 class InvalidDriverPath(Exception):
     pass
+
+class InvalidCredentials(Exception):
+    pass
