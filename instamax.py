@@ -13,17 +13,18 @@ try:
     elif sys_os() == 'Linux':
         CLEAR_CONSOLE_COMMAND = 'clear'
 
-    def configure() -> None:
+    def configure(bot_instance: Bot = None) -> None:
         driver_options = {'1': 'chrome', '2': 'firefox', '3': 'safari'}
 
         system(CLEAR_CONSOLE_COMMAND)
-        print('Enter your Instagram account username: ', end='')
+        print('Enter your Instagram account username: @', end='')
         username = input()
         print('Enter your Instagram account password: ', end='')
         password = input()
         system(CLEAR_CONSOLE_COMMAND)
 
         while True:
+            print('Select your driver model')
             print(DRIVER_MENU)
             driver = input('>>> ')
             
@@ -50,6 +51,10 @@ try:
 
         with open(OPTIONS_FILE, 'w') as file:
             file.write(username + '\n' + password + '\n' + driver + '\n' + driver_path)
+
+        insta_bot.close_browser()
+
+        return username, password, driver, driver_path
 
     def follow_suggested() -> int:
         system(CLEAR_CONSOLE_COMMAND)
@@ -122,7 +127,7 @@ try:
             break
 
         system(CLEAR_CONSOLE_COMMAND)
-        print('Liking')
+        print(f'Liking posts from #{hashtag}')
         liked_posts = insta_bot.like_photos_by_hashtag(hashtag, quantity)
 
         system(CLEAR_CONSOLE_COMMAND)
@@ -326,7 +331,7 @@ try:
         input()
     
     if not path.isfile(OPTIONS_FILE):
-        configure()
+        username, password, driver, driver_path = configure()
     else:
         try:
             with open(OPTIONS_FILE, 'r') as file:
@@ -373,6 +378,22 @@ try:
         option = input('\n>>> ')
 
         try:
+            if option == '0':
+                username, password, driver, driver_path = options[option]()
+                insta_bot = Bot(username, password, driver, driver_path)
+
+                try:
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print('Trying to log in...')
+                    insta_bot.login()
+                except InvalidCredentials:
+                    insta_bot.close_browser()
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print('Invalid credentials, not logged in. Aborting.')
+                    exit(1)
+
+                continue
+            
             options[option]()
             continue
         except KeyError:
