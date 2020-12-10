@@ -189,7 +189,7 @@ try:
                 print('Invalid option')
                 continue
     
-    def get_follower() -> None:
+    def search_follower() -> None:
         system(CLEAR_CONSOLE_COMMAND)
 
         print('Enter the account to be searched: @', end='')
@@ -207,6 +207,66 @@ try:
         else:
             print(f'Not found. @{account} is not following @{search_account}. Press anything to return to menu.', end='')
             input()
+
+    def get_following() -> None:
+        system(CLEAR_CONSOLE_COMMAND)
+        all = False
+
+        while True:
+            print('Enter the instagram account username: @', end='')
+            account = input()
+
+            print('How many following users you want to get? (numbers only) (type "all" to get all following users) ', end='')
+            quantity = input()
+
+            try:
+                quantity = int(quantity)
+            except ValueError:
+                if quantity == 'all' or quantity == 'All' or quantity == 'ALL':
+                    all = True
+                else:
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print('Invalid quantity\n')
+                    continue
+            
+            break
+
+        system(CLEAR_CONSOLE_COMMAND)
+        print(f'Searching for following users in {account}')
+        following = [user for user in insta_bot.get_following(account, quantity, all)]
+
+        while True:
+            system(CLEAR_CONSOLE_COMMAND)
+            print(f'{len(following)} following users found on @{account}. Do you want to save this information into a file? (Y/N) ', end='')
+            save = input()
+
+            if save == 'Y' or save == 'y':
+                while True:
+                    print('\nEnter the path for the file to be saved: ', end='')
+                    path = input()
+
+                    try:
+                        with open(path, 'w') as file:
+                            for user in following:
+                                file.write(user + '\n')
+                    except FileNotFoundError:
+                        system(CLEAR_CONSOLE_COMMAND)
+                        print('Invalid path')
+                        continue
+                    
+                    break
+                
+                print(f'Information saved in {path}. Press anything to return to menu.', end='')
+                input()
+                break
+            elif save == 'N' or save == 'n':
+                print('\nNo information saved. Press anything to return to menu.', end='')
+                input()
+                break
+            else:
+                system(CLEAR_CONSOLE_COMMAND)
+                print('Invalid option')
+                continue
     
     if not path.isfile(OPTIONS_FILE):
         configure()
@@ -237,7 +297,7 @@ try:
         print('Invalid credentials, not logged in. Aborting.')
         exit(1)
 
-    options = {'0': configure, '1': follow_suggested, '2': like_posts, '3': get_followers, '4': get_follower}
+    options = {'0': configure, '1': follow_suggested, '2': like_posts, '3': get_followers, '4': search_follower, '5': get_following}
 
     while True:
         system(CLEAR_CONSOLE_COMMAND)
