@@ -1,4 +1,5 @@
 from selenium import webdriver
+from os import devnull
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -6,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from random import randint
 from selenium.common.exceptions import WebDriverException, NoSuchElementException, ElementClickInterceptedException, TimeoutException
-import exceptions
+from . import exceptions
 from time import sleep
 from typing import Iterator, Iterable, List
 
@@ -31,7 +32,11 @@ class Bot:
         password_field.send_keys(self.senha)
         sleep(2)
         password_field.send_keys(Keys.ENTER)
-        sleep(5)
+
+        try:
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/span')))
+        except TimeoutException:
+            raise exceptions.InvalidCredentials('Invalid credentials, not logged in. Aborting.')
 
     def like_photos_by_hashtag(self, hashtag: str, quantity=100) -> int:
         liked_photos = 0
@@ -90,7 +95,7 @@ class Bot:
                 self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[5]/div/div/div/div[3]/button[1]')))
 
                 self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
-                sleep(5)
+                sleep(randint(2, 7))
 
     def search_follower(self, search_account: str, account: str) -> bool:
         for follower in self.get_followers(search_account, all=True):
@@ -125,7 +130,7 @@ class Bot:
             self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[5]/div/div/div/div[3]/button[1]')))
 
             self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
-            sleep(5)
+            sleep(randint(2, 7))
 
     def get_followers(self, account: str, quantity=100, all=False) -> Iterator[str]:
         self.driver.get(self.INSTAGRAM_URL + account)
@@ -201,23 +206,16 @@ class Bot:
             driver_model = webdriver.Chrome
         elif driver == 'firefox':
             driver_model = webdriver.Firefox
-        elif driver == 'edge':
-            driver_model = webdriver.Edge
         elif driver == 'safari':
             driver_model = webdriver.Safari
         else:
             driver_model = None
 
         try:
-            browser = driver_model(driverpath)
+            browser = driver_model(executable_path=driverpath, service_log_path=devnull, log_path=devnull)
         except TypeError:
             raise exceptions.InvalidDriverModel('This driver model is not supported')
         except WebDriverException:
             raise exceptions.InvalidDriverPath('Driver executable needs to be in PATH')
 
         return browser
-
-if __name__ == '__main__':
-    insta_bot = Bot('e', 'mtzika99', 'edge', 'msedgedriver.exe')
-    insta_bot.login()
-    insta_bot.unfollow(ignore=['ra7onderecho'])
