@@ -286,6 +286,44 @@ try:
         else:
             print(f'Not found. @{account} is not followed by @{search_account}. Press anything to return to menu.', end='')
             input()
+
+    def unfollow_not_followers() -> None:
+        system(CLEAR_CONSOLE_COMMAND)
+
+        while True:
+            ignore = []
+            print("Are there any accounts you don't want to unfollow? (Y/N) ", end='')
+            dont_unfollow = input()
+
+            if dont_unfollow == 'Y' or dont_unfollow == 'y':
+                while True:
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print(f'{len(ignore)} accounts to not follow\n')
+                    print('Enter the account username (type "exit" to stop): ', end='')
+                            
+                    username = input()
+
+                    if username == 'exit':
+                        break
+                            
+                    ignore.append(username)
+                    continue
+            elif dont_unfollow == 'N' or dont_unfollow == 'n':
+                break
+            else:
+                system(CLEAR_CONSOLE_COMMAND)
+                print('Invalid option')
+                continue
+                    
+            break
+        
+        system(CLEAR_CONSOLE_COMMAND)
+        print('Unfollowing not followers')
+        unfollowed = insta_bot.unfollow_not_followers(ignore)
+
+        system(CLEAR_CONSOLE_COMMAND)
+        print(f'{unfollowed} not followers unfollowed. Press anything to return to menu.', end='')
+        input()
     
     if not path.isfile(OPTIONS_FILE):
         configure()
@@ -324,6 +362,7 @@ try:
         '4': search_follower,
         '5': get_following,
         '6': search_following,
+        '7': unfollow_not_followers,
     }
 
     while True:
