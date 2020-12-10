@@ -128,6 +128,66 @@ try:
         system(CLEAR_CONSOLE_COMMAND)
         print(f'{liked_posts} posts liked. Press anything to return to the menu.', end='')
         input()
+
+    def get_followers() -> None:
+        system(CLEAR_CONSOLE_COMMAND)
+        all = False
+
+        while True:
+            print('Enter the instagram account username: @', end='')
+            account = input()
+
+            print('How many followers you want to get? (numbers only) (type "all" to get all followers) ', end='')
+            quantity = input()
+
+            try:
+                quantity = int(quantity)
+            except ValueError:
+                if quantity == 'all' or quantity == 'All' or quantity == 'ALL':
+                    all = True
+                else:
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print('Invalid quantity\n')
+                    continue
+            
+            break
+
+        system(CLEAR_CONSOLE_COMMAND)
+        print(f'Searching for followers of {account}')
+        followers = [follower for follower in insta_bot.get_followers(account, quantity, all)]
+
+        while True:
+            system(CLEAR_CONSOLE_COMMAND)
+            print(f'{len(followers)} followers found on @{account}. Do you want to save this information into a file? (Y/N) ', end='')
+            save = input()
+
+            if save == 'Y' or save == 'y':
+                while True:
+                    print('\nEnter the path for the file to be saved: ', end='')
+                    path = input()
+
+                    try:
+                        with open(path, 'w') as file:
+                            for follower in followers:
+                                file.write(follower + '\n')
+                    except FileNotFoundError:
+                        system(CLEAR_CONSOLE_COMMAND)
+                        print('Invalid path')
+                        continue
+                    
+                    break
+                
+                print(f'Information saved in {path}. Press anything to return to menu.', end='')
+                input()
+                break
+            elif save == 'N' or save == 'n':
+                print('\nNo information saved. Press anything to return to menu.', end='')
+                input()
+                break
+            else:
+                system(CLEAR_CONSOLE_COMMAND)
+                print('Invalid option')
+                continue
     
     if not path.isfile(OPTIONS_FILE):
         configure()
@@ -158,7 +218,7 @@ try:
         print('Invalid credentials, not logged in. Aborting.')
         exit(1)
 
-    options = {'0': configure, '1': follow_suggested, '2': like_posts,}
+    options = {'0': configure, '1': follow_suggested, '2': like_posts, '3': get_followers}
 
     while True:
         system(CLEAR_CONSOLE_COMMAND)
