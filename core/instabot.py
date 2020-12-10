@@ -124,7 +124,7 @@ class Bot:
 
         for not_follower in not_followers:
             self.driver.get(self.INSTAGRAM_URL + not_follower)
-            self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, '5f5mN')))
+            self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, '_5f5mN')))
 
             self.driver.find_element_by_class_name('_5f5mN').click()
             self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[5]/div/div/div/div[3]/button[1]')))
