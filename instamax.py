@@ -189,6 +189,25 @@ try:
                 print('Invalid option')
                 continue
     
+    def get_follower() -> None:
+        system(CLEAR_CONSOLE_COMMAND)
+
+        print('Enter the account to be searched: @', end='')
+        search_account = input()
+        print('Enter the account to be found: @', end='')
+        account = input()
+
+        system(CLEAR_CONSOLE_COMMAND)
+        print(f'Searching for @{account} in @{search_account} list of followers')
+        is_follower = insta_bot.search_follower(search_account, account)
+
+        if is_follower:
+            print(f'Found. @{account} is following @{search_account}. Press anything to return to menu.', end='')
+            input()
+        else:
+            print(f'Not found. @{account} is not following @{search_account}. Press anything to return to menu.', end='')
+            input()
+    
     if not path.isfile(OPTIONS_FILE):
         configure()
     else:
@@ -218,7 +237,7 @@ try:
         print('Invalid credentials, not logged in. Aborting.')
         exit(1)
 
-    options = {'0': configure, '1': follow_suggested, '2': like_posts, '3': get_followers}
+    options = {'0': configure, '1': follow_suggested, '2': like_posts, '3': get_followers, '4': get_follower}
 
     while True:
         system(CLEAR_CONSOLE_COMMAND)
