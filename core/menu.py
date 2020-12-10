@@ -6,8 +6,7 @@ BANNER = '''
 /___/   /_/ /_/ /____/  \__/  \__,_/  /_/  /_/   \__,_/  /_/|_|  
 '''
 
-DRIVER_MENU = '''Select your driver model
-
+DRIVER_MENU = '''
 [1] - Chrome
 [2] - Firefox
 [3] - Safari
