@@ -206,7 +206,7 @@ class Bot:
             yield following
 
     def close_browser(self):
-        self.driver.close()
+        self.driver.quit()
 
     def init_browser(self, driver: str, driverpath: str) -> WebDriver:
         if driver == 'chrome':
