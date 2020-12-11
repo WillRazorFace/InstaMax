@@ -84,18 +84,25 @@ class Bot:
         return followed
 
     def unfollow(self, quantity=100, ignore: List[str]=[], all=False) -> None:
+        unfollowed = 0
         following_users = [user for user in self.get_following(self.usuario, quantity, all)]
 
         for user in following_users:
             if user not in ignore:
-                self.driver.get(self.INSTAGRAM_URL + user)
-                self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, '5f5mN')))
+                try:
+                    self.driver.get(self.INSTAGRAM_URL + user)
+                    self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, '_5f5mN')))
 
-                self.driver.find_element_by_class_name('_5f5mN').click()
-                self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[5]/div/div/div/div[3]/button[1]')))
+                    self.driver.find_element_by_class_name('_5f5mN').click()
+                    self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[5]/div/div/div/div[3]/button[1]')))
 
-                self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
-                sleep(randint(2, 7))
+                    self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
+                    unfollowed += 1
+                    sleep(randint(2, 7))
+                except TimeoutException:
+                    return unfollowed
+            
+        return unfollowed
 
     def search_follower(self, search_account: str, account: str) -> bool:
         for follower in self.get_followers(search_account, all=True):
