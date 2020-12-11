@@ -115,7 +115,7 @@ def like_posts(bot_instance: Bot) -> None:
 
     system(CLEAR_CONSOLE_COMMAND)
     print(f'Liking posts from #{hashtag}')
-    liked_posts = bot_instance.like_photos_by_hashtag(hashtag, quantity)
+    liked_posts = bot_instance.like_posts_by_hashtag(hashtag, quantity)
 
     system(CLEAR_CONSOLE_COMMAND)
     print(f'{liked_posts} posts liked. Press anything to return to the menu.', end='')
