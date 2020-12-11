@@ -13,7 +13,7 @@ try:
     elif sys_os() == 'Linux':
         CLEAR_CONSOLE_COMMAND = 'clear'
 
-    def configure(bot_instance: Bot = None) -> None:
+    def configure(bot_instance: Bot = None) -> tuple:
         driver_options = {'1': 'chrome', '2': 'firefox', '3': 'safari'}
 
         system(CLEAR_CONSOLE_COMMAND)
@@ -329,6 +329,61 @@ try:
         system(CLEAR_CONSOLE_COMMAND)
         print(f'{unfollowed} not followers unfollowed. Press anything to return to menu.', end='')
         input()
+
+    def unfollow() -> None:
+        system(CLEAR_CONSOLE_COMMAND)
+        all = False
+
+        while True:
+            print('How many following users you want to unfollow? (numbers only) (type "all" to unfollow all users except those you specify) ', end='')
+            quantity = input()
+
+            try:
+                quantity = int(quantity)
+            except ValueError:
+                if quantity == 'all' or quantity == 'All' or quantity == 'ALL':
+                    all = True
+                else:
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print('Invalid quantity\n')
+                    continue
+            
+            break
+
+        while True:
+            ignore = []
+            print("Are there any accounts you don't want to unfollow? (Y/N) ", end='')
+            dont_unfollow = input()
+
+            if dont_unfollow == 'Y' or dont_unfollow == 'y':
+                while True:
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print(f'{len(ignore)} accounts to not unfollow\n')
+                    print('Enter the account username (type "exit" to stop): ', end='')
+                            
+                    username = input()
+
+                    if username == 'exit':
+                        break
+                            
+                    ignore.append(username)
+                    continue
+            elif dont_unfollow == 'N' or dont_unfollow == 'n':
+                break
+            else:
+                system(CLEAR_CONSOLE_COMMAND)
+                print('Invalid option')
+                continue
+                    
+            break
+
+        system(CLEAR_CONSOLE_COMMAND)
+        print('Unfollowing')
+        unfollowed = insta_bot.unfollow(quantity, ignore, all)
+
+        system(CLEAR_CONSOLE_COMMAND)
+        print(f'{unfollowed} unfollowed users. Press anything to return to menu.', end='')
+        input()
     
     if not path.isfile(OPTIONS_FILE):
         username, password, driver, driver_path = configure()
@@ -367,7 +422,9 @@ try:
         '4': search_follower,
         '5': get_following,
         '6': search_following,
-        '7': unfollow_not_followers,
+        '7': search_not_followers,
+        '8': unfollow_not_followers,
+        '9': unfollow
     }
 
     while True:

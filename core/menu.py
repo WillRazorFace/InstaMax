@@ -20,5 +20,6 @@ MAIN_MENU = '''
 [4] - Search follower in an account
 [5] - Get following users from an account
 [6] - Search following user in an account
-[7] - Unfollow not followers
-[8] - Unfollow'''
+[7] - Search not followers
+[8] - Unfollow not followers
+[9] - Unfollow'''
