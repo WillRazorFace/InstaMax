@@ -7,7 +7,7 @@ try:
     from typing import Type
     from time import sleep
 
-    OPTIONS_FILE = '.options'
+    OPTIONS_FILE = 'instamax_config'
     if sys_os() == 'Windows':
         CLEAR_CONSOLE_COMMAND = 'cls'
     elif sys_os() == 'Linux':
@@ -51,8 +51,6 @@ try:
 
         with open(OPTIONS_FILE, 'w') as file:
             file.write(username + '\n' + password + '\n' + driver + '\n' + driver_path)
-
-        insta_bot.close_browser()
 
         return username, password, driver, driver_path
 
@@ -475,6 +473,7 @@ try:
         try:
             if option == '0':
                 username, password, driver, driver_path = options[option]()
+                insta_bot.close_browser()
                 insta_bot = Bot(username, password, driver, driver_path)
 
                 try:
