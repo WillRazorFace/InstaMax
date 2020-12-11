@@ -36,7 +36,7 @@ class Bot:
         try:
             self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/span')))
         except TimeoutException:
-            raise exceptions.InvalidCredentials('Invalid credentials, not logged in. Aborting.')
+            raise exceptions.InvalidCredentials('Invalid credentials, not logged in')
 
     def like_photos_by_hashtag(self, hashtag: str, quantity=100) -> int:
         liked_photos = 0
