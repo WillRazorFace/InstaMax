@@ -38,27 +38,32 @@ class Bot:
         except TimeoutException:
             raise exceptions.InvalidCredentials('Invalid credentials, not logged in')
 
-    def like_photos_by_hashtag(self, hashtag: str, quantity=100) -> int:
-        liked_photos = 0
+    def like_posts_by_hashtag(self, hashtag: str, quantity=100) -> int:
+        liked_posts = 0
         
         self.driver.get(self.INSTAGRAM_URL + f'explore/tags/{hashtag}')
         sleep(5)
 
         self.driver.find_element_by_class_name('_9AhH0').click()
         
-        while liked_photos < quantity:
+        while liked_posts < quantity:
             sleep(2)
 
             try:
-                self.driver.find_element_by_class_name('fr66n').click()
-                liked_photos += 1
+                self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.fr66n > button:nth-child(1) > div:nth-child(1) > span:nth-child(1) > svg:nth-child(1)')))
+                like_button = self.driver.find_element_by_css_selector('.fr66n > button:nth-child(1) > div:nth-child(1) > span:nth-child(1) > svg:nth-child(1)')
+
+                if not like_button.get_attribute('fill') == '#ed4956':
+                    like_button.click()
+                    liked_posts += 1
+                
                 self.driver.find_element_by_class_name('_65Bje').click()
-            except (ElementClickInterceptedException, NoSuchElementException):
-                return liked_photos
+            except (ElementClickInterceptedException, NoSuchElementException, TimeoutException):
+                return liked_posts
 
             sleep(randint(5, 15))
         
-        return liked_photos
+        return liked_posts
 
     def follow_suggested(self, quantity=100, ignore: List[str] = []) -> int:
         followed = 0
