@@ -292,6 +292,44 @@ try:
             print(f'Not found. @{account} is not followed by @{search_account}. Press anything to return to menu.', end='')
             input()
 
+    def search_not_followers() -> None:
+        system(CLEAR_CONSOLE_COMMAND)
+        print('Searching for not followers')
+        not_followers = insta_bot.search_not_followers()
+
+        while True:
+            system(CLEAR_CONSOLE_COMMAND)
+            print(f'{len(not_followers)} not followers found on your account. Do you want to save this information into a file? (Y/N) ', end='')
+            save = input()
+
+            if save == 'Y' or save == 'y':
+                while True:
+                    print('\nEnter the path for the file to be saved: ', end='')
+                    path = input()
+
+                    try:
+                        with open(path, 'w') as file:
+                            for not_follower in not_followers:
+                                file.write(not_follower + '\n')
+                    except FileNotFoundError:
+                        system(CLEAR_CONSOLE_COMMAND)
+                        print('Invalid path')
+                        continue
+                    
+                    break
+                
+                print(f'Information saved in {path}. Press anything to return to menu.', end='')
+                input()
+                break
+            elif save == 'N' or save == 'n':
+                print('\nNo information saved. Press anything to return to menu.', end='')
+                input()
+                break
+            else:
+                system(CLEAR_CONSOLE_COMMAND)
+                print('Invalid option')
+                continue
+
     def unfollow_not_followers() -> None:
         system(CLEAR_CONSOLE_COMMAND)
 
