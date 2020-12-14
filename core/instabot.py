@@ -67,24 +67,35 @@ class Bot:
 
     def follow_suggested(self, quantity=100, ignore: List[str] = []) -> int:
         followed = 0
+        counter = 1
 
         self.driver.get(self.INSTAGRAM_URL + 'explore/people/suggested/')
         sleep(5)
 
         while followed < quantity:
             try:
-                follow_button = self.driver.find_element_by_xpath('//button[text()="Seguir"]')
-                follow_button.click()
-                followed += 1
+                user = self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/div[2]/div/div/div[' + str(counter) + ']/div[2]/div[1]/div/span')
+
+                if user.text not in ignore:
+                    follow_button = self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/div[2]/div/div/div[' + str(counter) + ']/div[3]/button')
+                    follow_button.click()
+
+                    followed += 1
+
+                counter += 1
             except NoSuchElementException:
                 self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+                counter += 1
                 sleep(5)
             except ElementClickInterceptedException:
                 self.driver.execute_script('arguments[0].scrollIntoView();', follow_button)
                 sleep(5)
                 follow_button.click()
+
+                followed += 1
+                counter += 1
                 
-            sleep(randint(5, 10))
+            sleep(randint(5, 12))
         
         return followed
 
