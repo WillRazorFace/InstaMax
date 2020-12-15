@@ -15,8 +15,8 @@ class Bot:
     INSTAGRAM_URL: str = 'https://www.instagram.com/'
 
     def __init__(self, usuario: str, senha: str, driver: str, driverpath: str) -> None:
-        self.usuario = usuario
-        self.senha = senha
+        self.user = usuario
+        self.password = senha
         self.driver = self.init_browser(driver, driverpath)
         self.wait = WebDriverWait(self.driver, 20)
 
@@ -27,9 +27,9 @@ class Bot:
         username_field = self.driver.find_element_by_name('username')
         password_field = self.driver.find_element_by_name('password')
 
-        username_field.send_keys(self.usuario)
+        username_field.send_keys(self.user)
         sleep(2)
-        password_field.send_keys(self.senha)
+        password_field.send_keys(self.password)
         sleep(2)
         password_field.send_keys(Keys.ENTER)
 
