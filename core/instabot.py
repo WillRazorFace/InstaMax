@@ -14,9 +14,9 @@ from typing import Iterator, Iterable, List
 class Bot:
     INSTAGRAM_URL: str = 'https://www.instagram.com/'
 
-    def __init__(self, usuario: str, senha: str, driver: str, driverpath: str) -> None:
-        self.user = usuario
-        self.password = senha
+    def __init__(self, user: str, password: str, driver: str, driverpath: str) -> None:
+        self.user = user
+        self.password = password
         self.driver = self.init_browser(driver, driverpath)
         self.wait = WebDriverWait(self.driver, 20)
 
@@ -101,7 +101,7 @@ class Bot:
 
     def unfollow(self, quantity=100, ignore: List[str]=[], all=False) -> None:
         unfollowed = 0
-        following_users = [user for user in self.get_following(self.usuario, quantity, all)]
+        following_users = [user for user in self.get_following(self.user, quantity, all)]
 
         for user in following_users:
             if user not in ignore:
@@ -135,8 +135,8 @@ class Bot:
         return False
 
     def search_not_followers(self) -> Iterable[str]:
-        followers = [follower for follower in self.get_followers(self.usuario, all=True)]
-        following = [following for following in self.get_following(self.usuario, all=True)]
+        followers = [follower for follower in self.get_followers(self.user, all=True)]
+        following = [following for following in self.get_following(self.user, all=True)]
 
         not_followers = [user for user in following if user not in followers]
 

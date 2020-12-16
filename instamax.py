@@ -65,7 +65,7 @@ try:
     while True:
         system(CLEAR_CONSOLE_COMMAND)
         print(BANNER)
-        print(f'Logged as @{insta_bot.usuario}')
+        print(f'Logged as @{insta_bot.user}')
         print(MAIN_MENU)
         option = input('\n>>> ')
 
