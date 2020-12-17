@@ -6,7 +6,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from random import randint
-from selenium.common.exceptions import WebDriverException, NoSuchElementException, ElementClickInterceptedException, TimeoutException
+from selenium.common.exceptions import (
+    WebDriverException,
+    NoSuchElementException,
+    ElementClickInterceptedException,
+    TimeoutException,
+    StaleElementReferenceException
+)
 from . import exceptions
 from time import sleep
 from typing import Iterator, Iterable, List
@@ -65,6 +71,43 @@ class Bot:
         
         return liked_posts
 
+    def like_feed_posts(self, quantity=100, all=False) -> int:
+        self.driver.get(self.INSTAGRAM_URL)
+        navbar = self.driver.find_element_by_xpath('/html/body/div[1]/section/nav')
+        self.driver.execute_script('arguments[0].remove();', navbar)
+
+        liked_posts = 0
+
+        while liked_posts < quantity:
+            print(liked_posts)
+            
+            articles = self.driver.find_elements_by_css_selector('article._8Rm4L')
+            
+            try:
+                for article in articles:
+                    svg = article.find_element_by_css_selector('div:nth-child(4) > section:nth-child(1) > span:nth-child(1) > button:nth-child(1) > div:nth-child(1) > span:nth-child(1) > svg:nth-child(1)')
+
+                    if not svg.get_attribute('fill') == '#ed4956':
+                        try:
+                            svg.click()
+                            liked_posts += 1
+                        except ElementClickInterceptedException:
+                            try:
+                                self.driver.execute_script('arguments[0].scrollIntoView();', svg)
+                                svg.click()
+                                like_posts += 1
+                            except ElementClickInterceptedException:
+                                pass
+                    else:
+                        self.driver.execute_script('window.scrollBy(0, window.innerHeight / 2);')
+                
+                    sleep(randint(1, 4))
+            except (StaleElementReferenceException, NoSuchElementException):
+                self.driver.execute_script('window.scrollBy(0, window.innerHeight / 2);')
+                continue
+
+        return liked_posts
+        
     def follow_suggested(self, quantity=100, ignore: List[str] = []) -> int:
         followed = 0
         counter = 1
@@ -81,11 +124,8 @@ class Bot:
                     follow_button.click()
 
                     followed += 1
-
-                counter += 1
             except NoSuchElementException:
                 self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-                counter += 1
                 sleep(5)
             except ElementClickInterceptedException:
                 self.driver.execute_script('arguments[0].scrollIntoView();', follow_button)
@@ -93,8 +133,8 @@ class Bot:
                 follow_button.click()
 
                 followed += 1
-                counter += 1
-                
+            
+            counter += 1
             sleep(randint(5, 12))
         
         return followed
