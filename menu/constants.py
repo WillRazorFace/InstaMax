@@ -24,11 +24,12 @@ DRIVER_MENU = '''
 MAIN_MENU = '''
 [0] - Reconfigure credentials and driver
 [1] - Follow suggested
-[2] - Like posts from hashtag
-[3] - Get followers from an account
-[4] - Search follower in an account
-[5] - Get following users from an account
-[6] - Search following user in an account
-[7] - Search not followers
-[8] - Unfollow not followers
-[9] - Unfollow'''
+[2] - Like posts from feed
+[3] - Like posts from hashtag
+[4] - Get followers from an account
+[5] - Search follower in an account
+[6] - Get following users from an account
+[7] - Search following user in an account
+[8] - Search not followers
+[9] - Unfollow not followers
+[10] - Unfollow'''
