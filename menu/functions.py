@@ -94,6 +94,30 @@ def follow_suggested(bot_instance: Bot) -> int:
     print(f'{followed} users followed. Press anything to return to the menu.', end='')
     input()
 
+def like_feed(bot_instance: Bot) -> None:
+    system(CLEAR_CONSOLE_COMMAND)
+
+    while True:
+        print('How many posts from feed do you want to like? (numbers only) ', end='')
+        quantity = input()
+
+        try:
+            quantity = int(quantity)
+        except ValueError:
+            system(CLEAR_CONSOLE_COMMAND)
+            print('Invalid quantity\n')
+            continue
+        
+        break
+
+    system(CLEAR_CONSOLE_COMMAND)
+    print(f'Liking posts from your feed')
+    liked_posts = bot_instance.like_feed_posts(quantity)
+
+    system(CLEAR_CONSOLE_COMMAND)
+    print(f'{liked_posts} posts liked. Press anything to return to the menu.', end='')
+    input()
+
 def like_posts(bot_instance: Bot) -> None:
     system(CLEAR_CONSOLE_COMMAND)
 
