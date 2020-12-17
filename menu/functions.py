@@ -174,7 +174,11 @@ def get_followers(bot_instance: Bot) -> None:
 
     while True:
         system(CLEAR_CONSOLE_COMMAND)
-        print(f'{len(followers)} followers found on @{account}. Do you want to save this information into a file? (Y/N) ', end='')
+        
+        for follower in followers:
+            print(follower)
+
+        print(f'\n{len(followers)} followers found on @{account}. Do you want to save this information into a file? (Y/N) ', end='')
         save = input()
 
         if save == 'Y' or save == 'y':
@@ -253,7 +257,11 @@ def get_following(bot_instance: Bot) -> None:
 
     while True:
         system(CLEAR_CONSOLE_COMMAND)
-        print(f'{len(following)} following users found on @{account}. Do you want to save this information into a file? (Y/N) ', end='')
+
+        for user in following:
+            print(user)
+
+        print(f'\n{len(following)} following users found on @{account}. Do you want to save this information into a file? (Y/N) ', end='')
         save = input()
 
         if save == 'Y' or save == 'y':
@@ -310,7 +318,11 @@ def search_not_followers(bot_instance: Bot) -> None:
 
     while True:
         system(CLEAR_CONSOLE_COMMAND)
-        print(f'{len(not_followers)} not followers found on your account. Do you want to save this information into a file? (Y/N) ', end='')
+
+        for user in not_followers:
+            print(user)
+
+        print(f'\n{len(not_followers)} not followers found on your account. Do you want to save this information into a file? (Y/N) ', end='')
         save = input()
 
         if save == 'Y' or save == 'y':
