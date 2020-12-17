@@ -1,19 +1,7 @@
 try:
     from core.instabot import Bot
     from menu.constants import MAIN_MENU, OPTIONS_FILE, CLEAR_CONSOLE_COMMAND, BANNER
-    from menu.functions import (
-        configure,
-        follow_suggested,
-        like_posts,
-        get_followers,
-        search_follower,
-        get_following,
-        search_following,
-        search_not_followers,
-        unfollow_not_followers,
-        unfollow
-    )
-    
+    from menu.functions import *
     from core.exceptions import InvalidCredentials
     from os import system, path, remove
     from platform import system as sys_os
@@ -52,14 +40,15 @@ try:
     options = {
         '0': configure,
         '1': follow_suggested,
-        '2': like_posts,
-        '3': get_followers,
-        '4': search_follower,
-        '5': get_following,
-        '6': search_following,
-        '7': search_not_followers,
-        '8': unfollow_not_followers,
-        '9': unfollow,
+        '2': like_feed,
+        '3': like_posts,
+        '4': get_followers,
+        '5': search_follower,
+        '6': get_following,
+        '7': search_following,
+        '8': search_not_followers,
+        '9': unfollow_not_followers,
+        '10': unfollow,
     }
 
     while True:

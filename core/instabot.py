@@ -71,7 +71,7 @@ class Bot:
         
         return liked_posts
 
-    def like_feed_posts(self, quantity=100, all=False) -> int:
+    def like_feed_posts(self, quantity=100) -> int:
         self.driver.get(self.INSTAGRAM_URL)
         navbar = self.driver.find_element_by_xpath('/html/body/div[1]/section/nav')
         self.driver.execute_script('arguments[0].remove();', navbar)
