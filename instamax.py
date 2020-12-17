@@ -35,6 +35,7 @@ try:
         insta_bot.close_browser()
         system(CLEAR_CONSOLE_COMMAND)
         print('Invalid credentials, not logged in. Aborting.')
+        remove(OPTIONS_FILE)
         exit(1)
 
     options = {
@@ -72,6 +73,7 @@ try:
                     insta_bot.close_browser()
                     system(CLEAR_CONSOLE_COMMAND)
                     print('Invalid credentials, not logged in. Aborting.')
+                    remove(OPTIONS_FILE)
                     exit(1)
 
                 continue
