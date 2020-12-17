@@ -44,6 +44,19 @@ class Bot:
         except TimeoutException:
             raise exceptions.InvalidCredentials('Invalid credentials, not logged in')
 
+    def deny_notifications(self) -> None:
+        sleep(5)
+
+        try:
+            not_now_button = self.driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div[3]/button[2]')
+        except NoSuchElementException:
+            try:
+                not_now_button = self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[2]')
+            except NoSuchElementException:
+                return
+        
+        not_now_button.click()
+
     def like_posts_by_hashtag(self, hashtag: str, quantity=100) -> int:
         liked_posts = 0
         
@@ -73,6 +86,7 @@ class Bot:
 
     def like_feed_posts(self, quantity=100) -> int:
         self.driver.get(self.INSTAGRAM_URL)
+        self.deny_notifications()
         navbar = self.driver.find_element_by_xpath('/html/body/div[1]/section/nav')
         self.driver.execute_script('arguments[0].remove();', navbar)
 
