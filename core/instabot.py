@@ -79,8 +79,6 @@ class Bot:
         liked_posts = 0
 
         while liked_posts < quantity:
-            print(liked_posts)
-            
             articles = self.driver.find_elements_by_css_selector('article._8Rm4L')
             
             try:
