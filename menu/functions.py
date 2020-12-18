@@ -476,18 +476,47 @@ def unfollow(bot_instace: Bot) -> None:
         dont_unfollow = input()
 
         if dont_unfollow == 'Y' or dont_unfollow == 'y':
-            while True:
-                system(CLEAR_CONSOLE_COMMAND)
-                print(f'{len(ignore)} accounts to not unfollow\n')
-                print('Enter the account username (type "exit" to stop): ', end='')
-                        
-                username = input()
+            system(CLEAR_CONSOLE_COMMAND)
 
-                if username == 'exit':
+            while True:
+                print('[1] - Get accounts from a file (one user per line)\n[2] - Insert accounts one by one\n')
+                accounts_input = input('>>> ')
+
+                if accounts_input == '1':
+                    system(CLEAR_CONSOLE_COMMAND)
+
+                    while True:
+                        print('Enter the path to the file (example/path/to/the/file): ', end='')
+                        file_path = input()
+
+                        if path.isfile(file_path):
+                            with open(file_path, 'r') as file:
+                                for account in file.readlines():
+                                    ignore.append(account)
+                                        
+                            break
+                        else:
+                            system(CLEAR_CONSOLE_COMMAND)
+                            print('Invalid path\n')
+                            continue
+                            
                     break
-                        
-                ignore.append(username)
-                continue
+                elif accounts_input == '2':
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print(f'{len(ignore)} accounts to not follow\n')
+                    print('Enter the account username (type "exit" to stop): ', end='')
+                                    
+                    username = input()
+
+                    if username == 'exit':
+                        break
+                                    
+                    ignore.append(username)
+                    continue
+                else:
+                    system(CLEAR_CONSOLE_COMMAND)
+                    print('Invalid option\n')
+                    continue
         elif dont_unfollow == 'N' or dont_unfollow == 'n':
             break
         else:
