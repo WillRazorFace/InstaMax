@@ -1,6 +1,7 @@
 from core.instabot import Bot
 from os import system, path
 from .constants import CLEAR_CONSOLE_COMMAND, OPTIONS_FILE, DRIVER_MENU
+from time import sleep
 
 def configure() -> tuple:
     driver_options = {'1': 'chrome', '2': 'firefox', '3': 'safari'}
@@ -59,23 +60,52 @@ def follow_suggested(bot_instance: Bot) -> int:
                 dont_follow = input()
 
                 if dont_follow == 'Y' or dont_follow == 'y':
-                    while True:
-                        system(CLEAR_CONSOLE_COMMAND)
-                        print(f'{len(ignore)} accounts to not follow\n')
-                        print('Enter the account username (type "exit" to stop): ', end='')
-                            
-                        username = input()
+                    system(CLEAR_CONSOLE_COMMAND)
 
-                        if username == 'exit':
-                            break
+                    while True:
+                        print('[1] - Get accounts from a file (one user per line)\n[2] - Insert accounts one by one\n')
+                        accounts_input = input('>>> ')
+
+                        if accounts_input == '1':
+                            system(CLEAR_CONSOLE_COMMAND)
+
+                            while True:
+                                print('Enter the path to the file (example/path/to/the/file): ', end='')
+                                file_path = input()
+
+                                if path.isfile(file_path):
+                                    with open(file_path, 'r') as file:
+                                        for account in file.readlines():
+                                            ignore.append(account)
+                                        
+                                    break
+                                else:
+                                    system(CLEAR_CONSOLE_COMMAND)
+                                    print('Invalid path\n')
+                                    continue
                             
-                        ignore.append(username)
-                        continue
+                            break
+                        elif accounts_input == '2':
+                            system(CLEAR_CONSOLE_COMMAND)
+                            print(f'{len(ignore)} accounts to not follow\n')
+                            print('Enter the account username (type "exit" to stop): ', end='')
+                                    
+                            username = input()
+
+                            if username == 'exit':
+                                break
+                                    
+                            ignore.append(username)
+                            continue
+                        else:
+                            system(CLEAR_CONSOLE_COMMAND)
+                            print('Invalid option\n')
+                            continue
                 elif dont_follow == 'N' or dont_follow == 'n':
                     break
                 else:
                     system(CLEAR_CONSOLE_COMMAND)
-                    print('Invalid option')
+                    print('Invalid option\n')
                     continue
                     
                 break
