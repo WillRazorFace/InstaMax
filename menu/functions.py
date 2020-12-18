@@ -86,17 +86,20 @@ def follow_suggested(bot_instance: Bot) -> int:
                             
                             break
                         elif accounts_input == '2':
-                            system(CLEAR_CONSOLE_COMMAND)
-                            print(f'{len(ignore)} accounts to not follow\n')
-                            print('Enter the account username (type "exit" to stop): ', end='')
-                                    
-                            username = input()
+                            while True:
+                                system(CLEAR_CONSOLE_COMMAND)
+                                print(f'{len(ignore)} accounts to not follow\n')
+                                print('Enter the account username (type "exit" to stop): ', end='')
+                                        
+                                username = input()
 
-                            if username == 'exit':
-                                break
-                                    
-                            ignore.append(username)
-                            continue
+                                if username == 'exit':
+                                    break
+                                        
+                                ignore.append(username)
+                                continue
+
+                            break
                         else:
                             system(CLEAR_CONSOLE_COMMAND)
                             print('Invalid option\n')
@@ -418,17 +421,20 @@ def unfollow_not_followers(bot_instace: Bot) -> None:
                         
                     break
                 elif accounts_input == '2':
-                    system(CLEAR_CONSOLE_COMMAND)
-                    print(f'{len(ignore)} accounts to not follow\n')
-                    print('Enter the account username (type "exit" to stop): ', end='')
-                                    
-                    username = input()
+                    while True:
+                        system(CLEAR_CONSOLE_COMMAND)
+                        print(f'{len(ignore)} accounts to not follow\n')
+                        print('Enter the account username (type "exit" to stop): ', end='')
+                                        
+                        username = input()
 
-                    if username == 'exit':
-                        break
-                                    
-                    ignore.append(username)
-                    continue
+                        if username == 'exit':
+                            break
+                                        
+                        ignore.append(username)
+                        continue
+
+                    break
                 else:
                     system(CLEAR_CONSOLE_COMMAND)
                     print('Invalid option\n')
@@ -502,17 +508,20 @@ def unfollow(bot_instace: Bot) -> None:
                             
                     break
                 elif accounts_input == '2':
-                    system(CLEAR_CONSOLE_COMMAND)
-                    print(f'{len(ignore)} accounts to not follow\n')
-                    print('Enter the account username (type "exit" to stop): ', end='')
-                                    
-                    username = input()
+                    while True:
+                        system(CLEAR_CONSOLE_COMMAND)
+                        print(f'{len(ignore)} accounts to not follow\n')
+                        print('Enter the account username (type "exit" to stop): ', end='')
+                                        
+                        username = input()
 
-                    if username == 'exit':
-                        break
-                                    
-                    ignore.append(username)
-                    continue
+                        if username == 'exit':
+                            break
+                                        
+                        ignore.append(username)
+                        continue
+                        
+                    break
                 else:
                     system(CLEAR_CONSOLE_COMMAND)
                     print('Invalid option\n')
