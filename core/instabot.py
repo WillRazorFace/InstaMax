@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.remote import webelement
 from os import devnull
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,7 +12,8 @@ from selenium.common.exceptions import (
     NoSuchElementException,
     ElementClickInterceptedException,
     TimeoutException,
-    StaleElementReferenceException
+    StaleElementReferenceException,
+    ElementNotInteractableException,
 )
 from . import exceptions
 from time import sleep
@@ -56,8 +58,23 @@ class Bot:
                 return
         
         not_now_button.click()
+    
+    def comment_post(self, post_element: webelement, comment: str) -> None:
+        form = post_element.find_element_by_tag_name('form')
+        textarea = form.find_element_by_tag_name('textarea')
+        button = form.find_element_by_tag_name('button')
 
-    def like_posts_by_hashtag(self, hashtag: str, quantity=100) -> int:
+        try:
+            textarea.click()
+            textarea.send_keys(comment)
+
+            sleep(1)
+
+            button.click()
+        except ElementNotInteractableException:
+            pass
+
+    def like_posts_by_hashtag(self, hashtag: str, quantity=100, comment='') -> int:
         liked_posts = 0
         
         self.driver.get(self.INSTAGRAM_URL + f'explore/tags/{hashtag}')
@@ -107,7 +124,7 @@ class Bot:
                             try:
                                 self.driver.execute_script('arguments[0].scrollIntoView();', svg)
                                 svg.click()
-                                like_posts += 1
+                                liked_posts += 1
                             except ElementClickInterceptedException:
                                 pass
                     else:
