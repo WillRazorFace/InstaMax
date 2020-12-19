@@ -92,7 +92,23 @@ class Bot:
                 if not like_button.get_attribute('fill') == '#ed4956':
                     like_button.click()
                     liked_posts += 1
-                
+
+                    if comment:
+                        try:
+                            sleep(randint(1, 2))
+
+                            article = self.driver.find_element_by_xpath('/html/body/div[5]/div[2]/div/article')
+                            form = article.find_element_by_tag_name('form')
+                            textarea = form.find_element_by_tag_name('textarea')
+
+                            textarea.click()
+
+                            self.comment_post(article, comment)
+
+                            sleep(randint(1, 3))
+                        except NoSuchElementException:
+                            pass
+                    
                 self.driver.find_element_by_class_name('_65Bje').click()
             except (ElementClickInterceptedException, NoSuchElementException, TimeoutException):
                 return liked_posts
