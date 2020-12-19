@@ -101,7 +101,7 @@ class Bot:
         
         return liked_posts
 
-    def like_feed_posts(self, quantity=100) -> int:
+    def like_feed_posts(self, quantity=100, comment='') -> int:
         self.driver.get(self.INSTAGRAM_URL)
         self.deny_notifications()
         navbar = self.driver.find_element_by_xpath('/html/body/div[1]/section/nav')
@@ -120,6 +120,18 @@ class Bot:
                         try:
                             svg.click()
                             liked_posts += 1
+
+                            if comment:
+                                sleep(randint(1, 2))
+
+                                form = article.find_element_by_tag_name('form')
+                                textarea = form.find_element_by_tag_name('textarea')
+
+                                textarea.click()
+
+                                self.comment_post(article, comment)
+
+                                sleep(randint(1, 3))
                         except ElementClickInterceptedException:
                             try:
                                 self.driver.execute_script('arguments[0].scrollIntoView();', svg)
