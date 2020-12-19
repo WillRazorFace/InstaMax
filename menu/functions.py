@@ -179,12 +179,24 @@ def like_posts(bot_instance: Bot) -> None:
             system(CLEAR_CONSOLE_COMMAND)
             print('Invalid quantity\n')
             continue
+
+        print('Do you want to comment on posts that are liked? (Y/N) (This will delay the process in trying to avoid Instagram comment blocking. You can change comments in the "comments.txt" file) ', end='')
+        comment = input()
+
+        if comment ==  'Y' or comment == 'y':
+            comment = True
+        elif comment == 'N' or comment == 'n':
+            comment = False
+        else:
+            system(CLEAR_CONSOLE_COMMAND)
+            print('Invalid option\n')
+            continue
         
         break
 
     system(CLEAR_CONSOLE_COMMAND)
     print(f'Liking posts from #{hashtag}')
-    liked_posts = bot_instance.like_posts_by_hashtag(hashtag, quantity)
+    liked_posts = bot_instance.like_posts_by_hashtag(hashtag, quantity, comment)
 
     system(CLEAR_CONSOLE_COMMAND)
     print(f'{liked_posts} posts liked. Press anything to return to the menu.', end='')
