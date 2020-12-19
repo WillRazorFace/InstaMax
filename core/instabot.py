@@ -74,8 +74,15 @@ class Bot:
         except ElementNotInteractableException:
             pass
 
-    def like_posts_by_hashtag(self, hashtag: str, quantity=100, comment='') -> int:
+    def like_posts_by_hashtag(self, hashtag: str, quantity=100, comment: bool = False) -> int:
         liked_posts = 0
+
+        if comment:
+            try:
+                with open('comments.txt', 'r') as file:
+                    comments = file.readlines()
+            except FileNotFoundError:
+                comment = False
         
         self.driver.get(self.INSTAGRAM_URL + f'explore/tags/{hashtag}')
         sleep(5)
@@ -103,7 +110,7 @@ class Bot:
 
                             textarea.click()
 
-                            self.comment_post(article, comment)
+                            self.comment_post(article, comments[randint(0, len(comments))].strip())
 
                             sleep(randint(1, 3))
                         except NoSuchElementException:
@@ -117,11 +124,18 @@ class Bot:
         
         return liked_posts
 
-    def like_feed_posts(self, quantity=100, comment='') -> int:
+    def like_feed_posts(self, quantity=100, comment: bool = False) -> int:
         self.driver.get(self.INSTAGRAM_URL)
         self.deny_notifications()
         navbar = self.driver.find_element_by_xpath('/html/body/div[1]/section/nav')
         self.driver.execute_script('arguments[0].remove();', navbar)
+
+        if comment:
+            try:
+                with open('comments.txt', 'r') as file:
+                    comments = file.readlines()
+            except FileNotFoundError:
+                comment = False
 
         liked_posts = 0
 
@@ -145,7 +159,7 @@ class Bot:
 
                                 textarea.click()
 
-                                self.comment_post(article, comment)
+                                self.comment_post(article, comments[randint(0, len(comments))].strip())
 
                                 sleep(randint(1, 3))
                         except ElementClickInterceptedException:
