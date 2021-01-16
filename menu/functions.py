@@ -76,7 +76,7 @@ def follow_suggested(bot_instance: Bot) -> int:
                                 if path.isfile(file_path):
                                     with open(file_path, 'r') as file:
                                         for account in file.readlines():
-                                            ignore.append(account)
+                                            ignore.append(account.strip())
                                         
                                     break
                                 else:
@@ -435,7 +435,7 @@ def unfollow_not_followers(bot_instace: Bot) -> None:
                         if path.isfile(file_path):
                             with open(file_path, 'r') as file:
                                 for account in file.readlines():
-                                    ignore.append(account)
+                                    ignore.append(account.strip())
                                         
                             break
                         else:
@@ -522,7 +522,7 @@ def unfollow(bot_instace: Bot) -> None:
                         if path.isfile(file_path):
                             with open(file_path, 'r') as file:
                                 for account in file.readlines():
-                                    ignore.append(account)
+                                    ignore.append(account.strip())
                                         
                             break
                         else:
