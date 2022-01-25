@@ -281,7 +281,6 @@ class Bot:
 
         if all:
             quantity = int(followers_button.text.split()[0])
-            print(quantity)
 
         followers_button.click()
 
@@ -297,12 +296,10 @@ class Bot:
             try:
                 follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
             except NoSuchElementException:
-                print('erro 1')
                 try:
                     self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath + f'{i}]')))
                     follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
                 except TimeoutException:
-                    print('erro 2')
                     break
             
             follower = follower_li.text.split()[0]
