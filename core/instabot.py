@@ -281,11 +281,14 @@ class Bot:
 
         if all:
             quantity = int(followers_button.text.split()[0])
+            print(quantity)
 
         followers_button.click()
 
         try:
             xpath = '/html/body/div[6]/div/div/div[2]/ul/div/li['
+
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath + '1]')))
             self.driver.find_element_by_xpath(xpath + '1]')
         except NoSuchElementException:
             xpath = '/html/body/div[5]/div/div/div[2]/ul/div/li['
@@ -321,6 +324,8 @@ class Bot:
 
         try:
             xpath = '/html/body/div[6]/div/div/div[3]/ul/div/li['
+
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath + '1]')))
             self.driver.find_element_by_xpath(xpath + '1]')
         except NoSuchElementException:
             xpath = '/html/body/div[5]/div/div/div[3]/ul/div/li['
