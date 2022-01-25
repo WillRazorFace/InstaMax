@@ -2,6 +2,7 @@ from core.instabot import Bot
 from os import system, path
 from .constants import CLEAR_CONSOLE_COMMAND, OPTIONS_FILE, DRIVER_MENU
 from time import sleep
+from getpass import getpass
 
 def configure() -> tuple:
     driver_options = {'1': 'chrome', '2': 'firefox', '3': 'safari'}
@@ -10,7 +11,7 @@ def configure() -> tuple:
     print('Enter your Instagram account username: @', end='')
     username = input()
     print('Enter your Instagram account password: ', end='')
-    password = input()
+    password = getpass()
     system(CLEAR_CONSOLE_COMMAND)
 
     while True:
