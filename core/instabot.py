@@ -42,7 +42,7 @@ class Bot:
         password_field.send_keys(Keys.ENTER)
 
         try:
-            self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[5]/span')))
+            self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/div/div/section/div/div[1]/div/span')))
         except TimeoutException:
             raise exceptions.InvalidCredentials('Invalid credentials, not logged in')
 
