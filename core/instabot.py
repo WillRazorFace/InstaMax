@@ -93,8 +93,8 @@ class Bot:
             sleep(2)
 
             try:
-                self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.fr66n > button:nth-child(1) > div:nth-child(1) > span:nth-child(1) > svg:nth-child(1)')))
-                like_button = self.driver.find_element_by_css_selector('.fr66n > button:nth-child(1) > div:nth-child(1) > span:nth-child(1) > svg:nth-child(1)')
+                self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.fr66n > button:nth-child(1) > div:nth-child(2) > span:nth-child(1) > svg:nth-child(1)')))
+                like_button = self.driver.find_element_by_css_selector('.fr66n > button:nth-child(1) > div:nth-child(2) > span:nth-child(1) > svg:nth-child(1)')
 
                 if not like_button.get_attribute('fill') == '#ed4956':
                     like_button.click()
@@ -115,8 +115,8 @@ class Bot:
                             sleep(randint(1, 3))
                         except NoSuchElementException:
                             pass
-                    
-                self.driver.find_element_by_class_name('_65Bje').click()
+                        
+                self.driver.find_element_by_css_selector('.l8mY4 > button:nth-child(1)').click()
             except (ElementClickInterceptedException, NoSuchElementException, TimeoutException):
                 return liked_posts
 
