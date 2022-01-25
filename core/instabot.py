@@ -284,20 +284,18 @@ class Bot:
 
         followers_button.click()
 
-        try:
-            xpath = '/html/body/div[4]/div/div/div[2]/ul/div/li['
-            self.driver.find_element_by_xpath(xpath + '1]')
-        except NoSuchElementException:
-            xpath = '/html/body/div[5]/div/div/div[2]/ul/div/li['
+        xpath = '/html/body/div[6]/div/div/div[2]/ul/div/li['
 
         for i in range(1, quantity + 1):
             try:
                 follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
             except NoSuchElementException:
+                print('erro 1')
                 try:
                     self.wait.until(EC.element_to_be_clickable((By.XPATH, xpath + f'{i}]')))
                     follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
                 except TimeoutException:
+                    print('erro 2')
                     break
             
             follower = follower_li.text.split()[0]
@@ -317,11 +315,7 @@ class Bot:
 
         following_button.click()
 
-        try:
-            xpath = '/html/body/div[4]/div/div/div[2]/ul/div/li['
-            self.driver.find_element_by_xpath(xpath + '1]')
-        except NoSuchElementException:
-            xpath = '/html/body/div[5]/div/div/div[2]/ul/div/li['
+        xpath = '/html/body/div[6]/div/div/div[3]/ul/div/li['
 
         for i in range(1, quantity + 1):
             try:
