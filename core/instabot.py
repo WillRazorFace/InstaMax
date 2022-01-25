@@ -263,9 +263,9 @@ class Bot:
                 self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, '_5f5mN')))
 
                 self.driver.find_element_by_class_name('_5f5mN').click()
-                self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[5]/div/div/div/div[3]/button[1]')))
+                self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div/div/div/div[3]/button[1]')))
 
-                self.driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[1]').click()
+                self.driver.find_element_by_xpath('/html/body/div[6]/div/div/div/div[3]/button[1]').click()
                 unfollowed += 1
                 sleep(randint(2, 7))
             except TimeoutException:
@@ -284,8 +284,12 @@ class Bot:
 
         followers_button.click()
 
-        xpath = '/html/body/div[6]/div/div/div[2]/ul/div/li['
-
+        try:
+            xpath = '/html/body/div[6]/div/div/div[2]/ul/div/li['
+            self.driver.find_element_by_xpath(xpath + '1]')
+        except NoSuchElementException:
+            xpath = '/html/body/div[5]/div/div/div[2]/ul/div/li['
+    
         for i in range(1, quantity + 1):
             try:
                 follower_li = self.driver.find_element_by_xpath(xpath + f'{i}]')
@@ -315,7 +319,11 @@ class Bot:
 
         following_button.click()
 
-        xpath = '/html/body/div[6]/div/div/div[3]/ul/div/li['
+        try:
+            xpath = '/html/body/div[6]/div/div/div[3]/ul/div/li['
+            self.driver.find_element_by_xpath(xpath + '1]')
+        except NoSuchElementException:
+            xpath = '/html/body/div[5]/div/div/div[3]/ul/div/li['
 
         for i in range(1, quantity + 1):
             try:
