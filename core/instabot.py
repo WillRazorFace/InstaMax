@@ -280,7 +280,7 @@ class Bot:
         followers_button = self.driver.find_element_by_css_selector("a[href*='/" + account +"/followers/']")
 
         if all:
-            quantity = int(followers_button.text.split()[0])
+            quantity = int(followers_button.text.split()[0].replace('.', ''))
 
         followers_button.click()
 
@@ -315,7 +315,7 @@ class Bot:
         following_button = self.driver.find_element_by_css_selector("a[href*='/" + account +"/following/']")
 
         if all:
-            quantity = int(following_button.text.split()[0])
+            quantity = int(following_button.text.split()[0].replace('.', ''))
 
         following_button.click()
 
